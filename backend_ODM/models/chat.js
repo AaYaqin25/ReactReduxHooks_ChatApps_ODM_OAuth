@@ -6,6 +6,7 @@ const chatSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
+    date: String
 }, { timestamps: true });
 
 

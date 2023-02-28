@@ -29,7 +29,7 @@ export default function FormChat() {
             if (readStatus === false) {
                 dispatch(notification(data))
             } else {
-                dispatch(addMessage({ _id: data._id, message: data.message }))
+                dispatch(addMessage({ _id: data._id, message: data.message, time: data.time }))
             }
         })
 
@@ -82,24 +82,32 @@ export default function FormChat() {
                             <div className="col-sm-9 col-xs-12" >
                                 <div className="col-inside-lg">
                                     <div className='card'>
-                                        <div id='card-header' className='card-header'>
+                                        <div id='card-header' className='card-header text-center'>
                                             <h4>{name}</h4>
                                         </div>
 
-                                        <div id='card-body2' className='card-body'>
-                                            <form className='form-control' onSubmit={submitChat}>
+                                        <form className='form-control' onSubmit={submitChat}>
+                                            <div id='card-body2' className='card-body'>
                                                 {
                                                     chatMessage.map((item) => {
                                                         return (
-                                                            <ChatBody key={item._id} chat={item.message} id={item.sender} sent={item.sent} delete={() => dispatch(removeChat(item._id, name))} resend={() => resendMessage(item._id, item.message, JSON.parse(localStorage.getItem('user'))?.sender, name)} />
+                                                            <ChatBody key={item._id} chat={item.message} id={item.sender} sent={item.sent} date={item.date} time={item.time} delete={() => dispatch(removeChat(item._id, name))} resend={() => resendMessage(item._id, item.message, JSON.parse(localStorage.getItem('user'))?.sender, name)} />
                                                         )
 
                                                     })
                                                 }
-                                                <input type='text' autoFocus={true} style={{ borderWidth: 1, borderRadius: 100, width: '93%', padding: 10, marginTop: '550px' }} placeholder='Write a message...' id='inputchat' name='inputchat' autoComplete='off' value={message} onChange={(e) => setMessage(e.target.value)} />
-                                                <button type='submit' style={{ marginLeft: 15, borderWidth: 1, borderRadius: 20, padding: 7, width: '40px', backgroundColor: '#0c8bee', color: 'white', borderColor: 'white' }}><i className="fa-regular fa-paper-plane"></i></button>
-                                            </form>
-                                        </div>
+                                            </div>
+                                            <div className='card-footer'>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <input type='text' autoFocus={true} style={{ display: 'flex', borderWidth: 1, borderRadius: '100px', width: '180%', height: '100%', paddingLeft: '3%', borderColor: 'black' }} placeholder='Write a message...' id='inputchat' name='inputchat' autoComplete='off' value={message} onChange={(e) => setMessage(e.target.value)} />
+                                                    </div>
+                                                    <div class="col">
+                                                        <button type='submit' style={{ display: 'flex', marginLeft: '80%', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderRadius: 20, height: '35px', width: '35px', backgroundColor: '#0c8bee', color: 'white', borderColor: 'white' }}><i className="fa-regular fa-paper-plane"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -110,8 +118,8 @@ export default function FormChat() {
                                         <div id='card-header' className='card-header'>
                                             <h2>Reciever Name</h2>
                                         </div>
-                                        <div id='card-body2' className='card-body'>
-                                            <h4 style={{ textAlign: 'center', color: 'grey', padding: '260px' }}>Select a chat to start messaging</h4>
+                                        <div id='card-begin' className='card-body'>
+                                            <h4 style={{ textAlign: 'center', color: 'grey', paddingTop: '35%' }}>Select a chat to start messaging</h4>
                                         </div>
                                     </div>
                                 </div>

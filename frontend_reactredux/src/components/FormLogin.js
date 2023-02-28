@@ -26,7 +26,7 @@ export default function FormLogin() {
     }
 
     return (
-        <div className='container-fluid' style={{ display: 'flex', flexDirection: 'column', padding: 200 }}>
+        <div className='container-fluid'>
             <form onSubmit={handleSubmit}>
                 <div className="row d-flex justify-content-center">
                     <div className="col-md-6">

@@ -25,6 +25,7 @@ const chats = (state = initialState, action) => {
                     {
                         _id: action.id,
                         message: action.message,
+                        date: action.date,
                         sent: true
                     }
                 ]
@@ -38,6 +39,7 @@ const chats = (state = initialState, action) => {
                             _id: action.payload._id,
                             message: action.payload.message,
                             sender: sender,
+                            date: action.payload.date,
                             sent: true
                         }
                     }

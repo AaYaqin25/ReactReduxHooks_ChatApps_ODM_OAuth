@@ -16,14 +16,17 @@ body {
 }
 
 #card-body {
-    height: calc(100vh - 180px);
+    height: calc(100vh - 150px);
 }
 
 #card-body2 {
-    height: calc(108vh - 205px);
-    overflow-y: auto;
+    height: calc(108vh - 245px);
+    overflow-y: scroll;
 }
 
+#card-begin {
+    height: calc(108vh - 190px);
+}
 
 #chat-body {
     box-sizing: border-box;
@@ -54,22 +57,4 @@ body {
     padding: 10px;
     width: fit-content;
     position: relative;
-}
-
-#span-chat {
-    margin-left: auto;
-}
-
-.chat-users .user {
-    position: relative;
-    padding: 0 0 0 50px;
-    display: block;
-    cursor: pointer;
-    margin: 0 0 20px;
-}
-
-/*****************CHAT BODY *******************/
-#card-header {
-    margin: 0 0 20px;
-    text-align: center;
 }

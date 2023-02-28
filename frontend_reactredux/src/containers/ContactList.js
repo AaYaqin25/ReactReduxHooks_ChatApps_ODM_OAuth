@@ -12,7 +12,7 @@ export default function ContactList(props) {
     const dispatch = useDispatch()
 
     const [redirect, setRedirect] = useState(false)
-    const [contactActive, setContactActive] = useState('');
+    const [contactActive, setContactActive] = useState('')
 
     useEffect(() => {
         dispatch(loadContact())
@@ -30,12 +30,11 @@ export default function ContactList(props) {
     }
 
     const handleSelectContact = (target) => {
-        setContactActive(target);
+        setContactActive(target)
         props.formChat(target)
     };
 
-    console.log(notification, 'ini notif');
-
+    console.log(contacts, 'ini contact');
     return (
         <div className="col-sm-3 col-xs-12">
             <div className="col-inside-lg chat">
@@ -57,7 +56,7 @@ export default function ContactList(props) {
                             ))}
                         </div>
                         <div className='card-footer'>
-                            <button type='button' className='btn btn-light' style={{ marginLeft: 70, color: 'red', fontWeight: 'bold', borderColor: 'red' }} onClick={LogOut} > LOG OUT</button>
+                            <button type='button' style={{ display: 'flex', color: 'red', fontWeight: 'bold', borderColor: 'red', borderRadius: '5px', backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', alignContent: 'center' }} onClick={LogOut} > LOG OUT</button>
                             {
                                 redirect && (
                                     <Navigate to='/' replace={true} />

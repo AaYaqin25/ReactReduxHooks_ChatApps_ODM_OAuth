@@ -7,9 +7,6 @@
 var app = require('../app');
 var debug = require('debug')('backend-odm:server');
 var http = require('http');
-// var { SaveMessageStore } = require('../APISocket/api.js')
-// var { v4 } = require('uuid')
-// var chatMessage = new SaveMessageStore()
 
 /**
  * Get port from environment and store in Express.
@@ -28,19 +25,24 @@ const io = require('socket.io')(server, {
   }
 })
 
+const users = {}
 io.on('connection', (socket) => {
   socket.on('join room', (data) => {
     socket.join(data)
     console.log(`User ${socket.id} has join room ${data}`);
+    console.log(io.sockets.adapter.rooms, 'join room 1')
   })
 
   socket.on('send message', (data) => {
-    socket.broadcast.to(data.to).emit('receive message', { _id: data._id, message: data.message })
+    console.log(data);
+    socket.to(data.to).emit('receive message', { _id: data._id, message: data.message, time: data.time })
+    console.log(io.sockets.adapter.rooms, 'join room 2')
   });
 
   socket.on('delete message', (data) => {
-    socket.broadcast.to(data.to).emit('delete message', data._id)
+    socket.to(data.to).emit('delete message', data._id)
   })
+
 });
 
 

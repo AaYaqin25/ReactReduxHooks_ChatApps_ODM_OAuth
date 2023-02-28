@@ -19,7 +19,6 @@ export const loadChat = () => {
             } else {
                 alert('gagal load message')
             }
-            console.log(data.data, 'ini load pertama');
         } catch (error) {
             dispatch(loadChatFailure(error))
         }
@@ -41,22 +40,29 @@ const addChatFailure = (id) => ({
 })
 
 
-const addChatRedux = (id, message) => ({
+const addChatRedux = (id, date, message) => ({
     type: 'ADD_CHAT',
     id,
+    date,
     message
+
 })
 
 export const addChat = (message, name) => {
     const id = Date.now()
+    const date = new Date().toLocaleTimeString(["id-ID"], {
+        hour: "2-digit",
+        minute: "2-digit"
+    })
     return async (dispatch, getState) => {
-        dispatch(addChatRedux(id, message))
+        dispatch(addChatRedux(id, date, message))
         try {
             let sender = JSON.parse(localStorage.getItem('user'))?.sender
-            const { data } = await request.post('chats', { message, sender })
+            const { data } = await request.post('chats', { message, sender, date })
             if (data.success) {
-                socket.emit('send message', { _id: data.data._id, message, to: name })
+                socket.emit('send message', { _id: data.data._id, message, to: name, time: date })
                 dispatch(addChatSuccess(id, data.data))
+                console.log(data.data.date);
             } else {
                 alert('gagal send message')
             }

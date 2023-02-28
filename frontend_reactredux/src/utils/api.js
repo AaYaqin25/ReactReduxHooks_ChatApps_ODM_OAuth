@@ -10,10 +10,8 @@ export const request = axios.create({
     }
 });
 
-
 export const IsLoggedIn = () => {
     const session = JSON.parse(localStorage.getItem('user'))
-
     return (
         <Fragment>
             {!session && (

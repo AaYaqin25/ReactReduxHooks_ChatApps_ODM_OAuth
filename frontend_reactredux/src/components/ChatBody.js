@@ -28,7 +28,9 @@ export default function ChatBody(props) {
                     show &&
                     <button type='button' className='btn btn-light' onClick={props.delete}><i className="fa-regular fa-trash-can"></i></button>
                 }
-                <span id='span-chat'><ReactMarkdown children={props.chat} /> </span>
+                <span style={{ marginLeft: '10px' }}><ReactMarkdown children={props.chat} />
+                    <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>{props.date}</div>
+                </span>
             </div>
         )
 
@@ -36,13 +38,17 @@ export default function ChatBody(props) {
         return (
             <div id="chat-body" ref={setRef} className="d-flex justify-content-end mb-4">
                 <button type='button' className='btn btn-light' onClick={props.resend}><i className="fa-solid fa-arrows-rotate"></i></button>
-                <span id='span-chat'><ReactMarkdown children={props.chat} /> </span>
+                <span style={{ marginLeft: '10px' }}><ReactMarkdown children={props.chat} />
+                    <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>{props.date}</div>
+                </span>
             </div>
         )
     } else {
         return (
             <div id="chat-bodyreciver" ref={setRef} className="d-flex justify-content-end mb-4">
-                <span id='span-chat'><ReactMarkdown children={props.chat} /> </span>
+                <span><ReactMarkdown children={props.chat} />
+                    <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>{props.time}</div>
+                </span>
             </div>
         )
     }

@@ -50,8 +50,10 @@ router.delete('/:_id', async function (req, res, next) {
 router.post('/auth', async function (req, res, next) {
   try {
     const { username } = req.body
-    const user = await User.findOne({ username })
-    if (!user) return res.status(401).json(new Response('username is not found', false))
+    let user = await User.findOne({ username })
+    if (!user) {
+      user = await User.create({ username })
+    }
     user.token = encodeToken({ userid: user._id, userName: user.username })
     await user.save()
     res.status(201).json(new Response({ id: user._id, username: user.username, token: user.token, sender: user._id }))
