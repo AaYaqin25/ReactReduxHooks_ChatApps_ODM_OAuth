@@ -5,17 +5,18 @@ import ContactList from './ContactList';
 import socket from '../socket';
 import ChatBody from '../components/ChatBody';
 import { useDispatch, useSelector } from 'react-redux';
-import { addChat, addMessage, loadChat, removeChat, removeMessage, resendChat } from '../actions/chats';
-import { notification, removeNotification } from '../actions/notification';
+import { addChat, addMessage, loadChat, receiverReadNotice, removeChat, removeMessage, resendChat, selectedReadNotice } from '../actions/chats';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane } from '@fortawesome/free-regular-svg-icons'
+import { loadContact } from '../actions/contact';
 
 export default function FormChat() {
-    const chatMessage = useSelector((state) => state.chats.data)
+    const selected = useSelector((state) => state.chats.selectedChat)
     const dispatch = useDispatch()
 
     const [chat, setChat] = useState(false)
     const [message, setMessage] = useState('')
     const [name, setName] = useState('')
-    const [readStatus, setReadStatus] = useState(false)
     const [isConnected, setIsConnected] = useState(socket.connected);
 
     useEffect(() => {
@@ -26,11 +27,19 @@ export default function FormChat() {
         });
 
         socket.on('receive message', (data) => {
-            if (readStatus === false) {
-                dispatch(notification(data))
-            } else {
-                dispatch(addMessage({ _id: data._id, message: data.message, time: data.time }))
-            }
+            dispatch(addMessage({ _id: data._id, message: data.message, date: data.date, sender: data.sender, receiver: data.receiver, readstatus: data.readstatus }, name))
+        })
+
+        socket.on('receive selected read notice', (id) => {
+            dispatch(selectedReadNotice(id))
+        })
+
+        socket.on('receive receiver read notice', (id) => {
+            dispatch(receiverReadNotice(id))
+        })
+
+        socket.on('receive new user', (data) => {
+            dispatch(loadContact({ username: data.username, _id: data._id, unreadCount: data.unreadCount }))
         })
 
         socket.on('delete message', (id) => {
@@ -41,6 +50,8 @@ export default function FormChat() {
             setIsConnected(false);
         });
 
+        console.log(isConnected);
+
         return () => {
             socket.off('connect');
             socket.off('receive message');
@@ -49,14 +60,11 @@ export default function FormChat() {
             socket.off('disconnect');
 
         };
-    }, [dispatch, readStatus]);
-
+    }, [dispatch, name, isConnected]);
 
     const handleFormChat = (target) => {
         setChat(true)
         setName(target)
-        setReadStatus(true)
-        dispatch(removeNotification([]))
     }
 
     const submitChat = (e) => {
@@ -70,13 +78,12 @@ export default function FormChat() {
         setMessage('')
     }
 
-    console.log(isConnected);
     return (
         <Fragment>
             <IsLoggedIn />
             <div className="container">
                 <div className="row row-broken">
-                    <ContactList formChat={handleFormChat} notification={notification} readStatus={readStatus} />
+                    <ContactList formChat={handleFormChat} />
                     {
                         chat ?
                             <div className="col-sm-9 col-xs-12" >
@@ -87,23 +94,23 @@ export default function FormChat() {
                                         </div>
 
                                         <form className='form-control' onSubmit={submitChat}>
-                                            <div id='card-body2' className='card-body'>
+                                            <div id='card-body-chat' className='card-body'>
                                                 {
-                                                    chatMessage.map((item) => {
+                                                    selected.map((item) => {
                                                         return (
-                                                            <ChatBody key={item._id} chat={item.message} id={item.sender} sent={item.sent} date={item.date} time={item.time} delete={() => dispatch(removeChat(item._id, name))} resend={() => resendMessage(item._id, item.message, JSON.parse(localStorage.getItem('user'))?.sender, name)} />
+                                                            <ChatBody key={item._id} chat={item.message} id={item.sender} receiver={item.receiver} sent={item.sent} date={item.date} readstatus={item.readstatus} delete={() => dispatch(removeChat(item._id, name))} resend={() => resendMessage(item._id, item.message, name)} />
                                                         )
 
                                                     })
                                                 }
                                             </div>
                                             <div className='card-footer'>
-                                                <div class="row">
-                                                    <div class="col">
+                                                <div className="row">
+                                                    <div className="col">
                                                         <input type='text' autoFocus={true} style={{ display: 'flex', borderWidth: 1, borderRadius: '100px', width: '180%', height: '100%', paddingLeft: '3%', borderColor: 'black' }} placeholder='Write a message...' id='inputchat' name='inputchat' autoComplete='off' value={message} onChange={(e) => setMessage(e.target.value)} />
                                                     </div>
-                                                    <div class="col">
-                                                        <button type='submit' style={{ display: 'flex', marginLeft: '80%', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderRadius: 20, height: '35px', width: '35px', backgroundColor: '#0c8bee', color: 'white', borderColor: 'white' }}><i className="fa-regular fa-paper-plane"></i></button>
+                                                    <div className="col">
+                                                        <button type='submit' style={{ display: 'flex', marginLeft: '80%', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderRadius: 20, height: '35px', width: '35px', backgroundColor: '#0c8bee', color: 'white', borderColor: 'white' }}><FontAwesomeIcon icon={faPaperPlane} /></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -115,11 +122,11 @@ export default function FormChat() {
                             <div className="col-sm-9 col-xs-12" >
                                 <div className="col-inside-lg">
                                     <div className='card'>
-                                        <div id='card-header' className='card-header'>
+                                        <div id='card-header' className='card-header text-center'>
                                             <h2>Reciever Name</h2>
                                         </div>
                                         <div id='card-begin' className='card-body'>
-                                            <h4 style={{ textAlign: 'center', color: 'grey', paddingTop: '35%' }}>Select a chat to start messaging</h4>
+                                            <h4 style={{ textAlign: 'center', color: 'grey', paddingTop: '45%', paddingLeft: '25%' }}>Select a chat to start messaging</h4>
                                         </div>
                                     </div>
                                 </div>

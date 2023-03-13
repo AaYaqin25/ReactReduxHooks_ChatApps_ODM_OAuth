@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const User = require('../models/user')
 const { Response, encodeToken, isLoggedIn, decodeToken } = require('../helpers/util');
-// const Chat = require('../models/chat');
 
 router.get('/', async function (req, res, next) {
   try {
@@ -50,9 +49,9 @@ router.delete('/:_id', async function (req, res, next) {
 router.post('/auth', async function (req, res, next) {
   try {
     const { username } = req.body
-    let user = await User.findOne({ username })
+    let user = await User.findOne({ username: username })
     if (!user) {
-      user = await User.create({ username })
+      user = await User.create({ username: username })
     }
     user.token = encodeToken({ userid: user._id, userName: user.username })
     await user.save()

@@ -3,14 +3,12 @@ import ContactItem from "../components/ContactItem"
 import { request } from '../utils/api';
 import { Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { loadContact } from "../actions/contact";
+import { loadContact, removeNotification } from "../actions/contact";
+import { selectedChat } from "../actions/chats";
 
 export default function ContactList(props) {
     const contacts = useSelector((state) => state.contacts.data)
-    let notification = useSelector((state) => state.notification.notif)
-
     const dispatch = useDispatch()
-
     const [redirect, setRedirect] = useState(false)
     const [contactActive, setContactActive] = useState('')
 
@@ -29,12 +27,12 @@ export default function ContactList(props) {
         }
     }
 
-    const handleSelectContact = (target) => {
+    const handleSelectContact = (target, _id) => {
         setContactActive(target)
         props.formChat(target)
+        dispatch(selectedChat({ target, _id }))
+        dispatch(removeNotification(_id))
     };
-
-    console.log(contacts, 'ini contact');
     return (
         <div className="col-sm-3 col-xs-12">
             <div className="col-inside-lg chat">
@@ -43,15 +41,15 @@ export default function ContactList(props) {
                         <div className="card-header text-center">
                             <h2>Contacts</h2>
                         </div>
-                        <div id='card-body' className='card-body'>
+                        <div id='card-body-contact' className='card-body'>
                             {contacts.map((item, index) => (
                                 <ContactItem
                                     key={index}
-                                    contact={item}
+                                    id={item._id}
+                                    count={item.unreadCount}
+                                    contact={item.username}
                                     selected={contactActive}
-                                    set={() => handleSelectContact(item)}
-                                    notification={notification}
-                                    readStatus={props.readStatus}
+                                    set={() => handleSelectContact(item.username, item._id)}
                                 />
                             ))}
                         </div>

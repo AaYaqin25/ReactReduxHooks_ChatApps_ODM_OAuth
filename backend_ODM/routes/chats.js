@@ -40,4 +40,19 @@ router.delete('/:_id', async function (req, res, next) {
     res.status(500).json(new Response(error, false))
   }
 });
+
+router.put('/:_id', async function (req, res, next) {
+  try {
+    const { updateReadStatus } = req.body
+    const updateChat = await Chat.updateOne(
+      { _id: req.params._id },
+      { $set: { readstatus: updateReadStatus } }
+    )
+    res.status(200).json(new Response(updateChat))
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(new Response(error, false))
+  }
+});
+
 module.exports = router;

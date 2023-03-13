@@ -1,9 +1,18 @@
 import '../styling/all.css'
 import React, { useState, useCallback } from "react"
 import ReactMarkdown from 'react-markdown'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import { faRotateRight } from '@fortawesome/free-solid-svg-icons'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCheckDouble } from '@fortawesome/free-solid-svg-icons'
+import Modal from 'react-modal'
+
+Modal.setAppElement('#root')
 
 export default function ChatBody(props) {
     const [show, setShow] = useState(false)
+    const [modal, setModal] = useState(false)
     const setRef = useCallback(node => {
         if (node) {
             node.scrollIntoView({ smooth: true })
@@ -26,10 +35,33 @@ export default function ChatBody(props) {
             <div id="chat-body" ref={setRef} className="d-flex justify-content-end mb-4" onMouseEnter={handleShowButton} onMouseLeave={handleHideButton}>
                 {
                     show &&
-                    <button type='button' className='btn btn-light' onClick={props.delete}><i className="fa-regular fa-trash-can"></i></button>
+                    <button type='button' className='btn btn-light' onClick={() => setModal(true)}><FontAwesomeIcon icon={faTrashCan} /></button>
                 }
+
+                <Modal
+                    isOpen={modal}
+                    className="modal-content"
+                    overlayClassName="modal-overlay"
+                >
+                    <FontAwesomeIcon icon={faTrashCan} />
+                    <h4>Are you sure want to delete this message ?</h4>
+                    <hr />
+                    <h5 className='msg'>{props.chat}</h5>
+                    <button type='button' className='btn btn-danger' onClick={props.delete}>Delete</button>
+                    <button type='button' className='btn btn-secondary' onClick={() => setModal(false)}>Cancel</button>
+                </Modal>
+                
                 <span style={{ marginLeft: '10px' }}><ReactMarkdown children={props.chat} />
-                    <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>{props.date}</div>
+                    <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+                        <div style={{ marginLeft: '10px' }}>
+                            {props.readstatus === false ?
+                                <FontAwesomeIcon icon={faCheck} color='white' />
+                                :
+                                <FontAwesomeIcon icon={faCheckDouble} color='white' />
+                            }
+                        </div>
+                        {props.date}
+                    </div>
                 </span>
             </div>
         )
@@ -37,7 +69,7 @@ export default function ChatBody(props) {
     } else if (props.sent === false && sender === _id) {
         return (
             <div id="chat-body" ref={setRef} className="d-flex justify-content-end mb-4">
-                <button type='button' className='btn btn-light' onClick={props.resend}><i className="fa-solid fa-arrows-rotate"></i></button>
+                <button type='button' className='btn btn-light' onClick={props.resend}><FontAwesomeIcon icon={faRotateRight} /></button>
                 <span style={{ marginLeft: '10px' }}><ReactMarkdown children={props.chat} />
                     <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>{props.date}</div>
                 </span>
@@ -45,11 +77,14 @@ export default function ChatBody(props) {
         )
     } else {
         return (
-            <div id="chat-bodyreciver" ref={setRef} className="d-flex justify-content-end mb-4">
-                <span><ReactMarkdown children={props.chat} />
-                    <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>{props.time}</div>
-                </span>
-            </div>
+            sender === props.receiver ?
+                <div id="chat-bodyreciver" ref={setRef} className="d-flex justify-content-end mb-4">
+                    <span><ReactMarkdown children={props.chat} />
+                        <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>{props.date}</div>
+                    </span>
+                </div>
+                :
+                null
         )
     }
 }

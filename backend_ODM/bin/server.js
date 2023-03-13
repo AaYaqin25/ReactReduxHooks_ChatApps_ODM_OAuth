@@ -21,26 +21,34 @@ app.set('port', port);
 var server = http.createServer(app);
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http://localhost:3001'
+    origin: 'http://192.168.1.99:3001'
   }
 })
 
-const users = {}
 io.on('connection', (socket) => {
   socket.on('join room', (data) => {
     socket.join(data)
-    console.log(`User ${socket.id} has join room ${data}`);
     console.log(io.sockets.adapter.rooms, 'join room 1')
   })
 
-  socket.on('send message', (data) => {
-    console.log(data);
-    socket.to(data.to).emit('receive message', { _id: data._id, message: data.message, time: data.time })
-    console.log(io.sockets.adapter.rooms, 'join room 2')
+  socket.on('send message', async (data) => {
+    socket.to(data.to).emit('receive message', { _id: data._id, message: data.message, date: data.date, sender: data.sender, receiver: data.receiver, readstatus: data.readstatus })
   });
 
   socket.on('delete message', (data) => {
     socket.to(data.to).emit('delete message', data._id)
+  })
+
+  socket.on('send selected read notice', (data) => {
+    socket.to(data.to).emit('receive selected read notice', data.id)
+  })
+
+  socket.on('send receiver read notice', (data) => {
+    socket.to(data.to).emit('receive receiver read notice', data.id)
+  })
+
+  socket.on('send new user', (data) => {
+    socket.broadcast.emit('receive new user', { username: data.username, _id: data._id, unreadCount: data.unreadCount })
   })
 
 });

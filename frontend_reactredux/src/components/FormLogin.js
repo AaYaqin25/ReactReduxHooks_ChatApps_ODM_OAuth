@@ -15,6 +15,7 @@ export default function FormLogin() {
                 localStorage.setItem('user', JSON.stringify(data.data))
                 request.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`
                 navigate('/chat', { replace: true })
+                socket.emit('send new user', { username: data.data.username, _id: data.data.id, unreadCount: 0 })
                 socket.emit('join room', data.data.username)
                 setUserName('')
             } else {

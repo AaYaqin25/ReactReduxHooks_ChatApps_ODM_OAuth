@@ -5,11 +5,37 @@ const initialState = {
 const contacts = (state = initialState, action) => {
     switch (action.type) {
         case 'LOAD_CONTACT_SUCCESS':
-            return {
-                data: action.payload
+            if (action.payload.payload) {
+                return {
+                    data: state.data.map(item => {
+                        if (item._id === action.payload.payload?.sender) {
+                            item.unreadCount = action.payload.cnt[0].unreadCount
+                            return item
+                        }
+                        return item
+                    })
+                }
+            } else {
+                return {
+                    data: action.payload.cnt
+                }
             }
 
         case 'LOAD_CONTACT_FAILURE':
+            break;
+
+        case 'REMOVE_NOTIFICATION_SUCCESS':
+            return {
+                data: state.data.map(item => {
+                    if (item._id === action.payload) {
+                        item.unreadCount = 0
+                        return item
+                    }
+                    return item
+                })
+            }
+
+        case 'REMOVE_NOTIFICATION_FAILURE':
             break;
 
         default:

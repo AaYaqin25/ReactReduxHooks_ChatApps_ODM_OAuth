@@ -1,13 +1,14 @@
-let sender = JSON.parse(localStorage.getItem('user'))?.sender
-
 const initialState = {
-    data: []
+    data: [],
+    selectedChat: [],
+    setReceiver: ""
 }
 
 const chats = (state = initialState, action) => {
     switch (action.type) {
         case 'LOAD_CHAT_SUCCESS':
             return {
+                ...state,
                 data: action.payload.map(item => {
                     item.sent = true
                     return item
@@ -17,29 +18,110 @@ const chats = (state = initialState, action) => {
         case 'LOAD_CHAT_FAILURE':
             break;
 
-        // FOR SENDER
+        case 'SELECTED_CHAT_SUCCESS':
+            return {
+                ...state,
+                selectedChat: action.payload.data,
+                setReceiver: action.payload.receiver
+            }
+
+        case 'SELECTED_CHAT_FAILURE':
+            break;
+
+        case 'SELECTED_READ_NOTICE_SUCCESS':
+            return {
+                ...state,
+                data: [...state.data.map(item => {
+                    if (item._id === action.payload) {
+                        item.readstatus = true
+                        return item
+                    }
+                    return item
+                })],
+                selectedChat: [...state.selectedChat.map(item => {
+                    if (item._id === action.payload) {
+                        item.readstatus = true
+                        return item
+                    }
+                    return item
+                })]
+            }
+
+        case 'SELECTED_READ_NOTICE_FAILURE':
+            break;
+
+        case 'RECEIVER_READ_NOTICE_SUCCESS':
+            return {
+                ...state,
+                data: [...state.data.map(item => {
+                    if (item._id === action.payload) {
+                        item.readstatus = true
+                        return item
+                    }
+                    return item
+                })],
+                selectedChat: [...state.selectedChat.map(item => {
+                    if (item._id === action.payload) {
+                        item.readstatus = true
+                        return item
+                    }
+                    return item
+                })]
+            }
+        case 'RECEIVER_READ_NOTICE_FAILURE':
+            break
+
+        // FOR SENDER //
         case 'ADD_CHAT':
             return {
+                ...state,
                 data: [
                     ...state.data,
                     {
                         _id: action.id,
                         message: action.message,
                         date: action.date,
+                        sender: action.sender,
                         sent: true
                     }
-                ]
+                ],
+                selectedChat: [
+                    ...state.selectedChat,
+                    {
+                        _id: action.id,
+                        message: action.message,
+                        date: action.date,
+                        sender: action.sender,
+                        sent: true
+                    }]
             }
 
         case 'ADD_CHAT_SUCCESS':
             return {
+                ...state,
                 data: [...state.data.map(item => {
                     if (item._id === action.id) {
                         return {
                             _id: action.payload._id,
                             message: action.payload.message,
-                            sender: sender,
+                            sender: action.payload.sender,
+                            receiver: action.payload.receiver,
                             date: action.payload.date,
+                            readstatus: action.payload.readstatus,
+                            sent: true
+                        }
+                    }
+                    return item
+                })],
+                selectedChat: [...state.selectedChat.map(item => {
+                    if (item._id === action.id) {
+                        return {
+                            _id: action.payload._id,
+                            message: action.payload.message,
+                            sender: action.payload.sender,
+                            receiver: action.payload.receiver,
+                            date: action.payload.date,
+                            readstatus: action.payload.readstatus,
                             sent: true
                         }
                     }
@@ -49,7 +131,17 @@ const chats = (state = initialState, action) => {
 
         case 'ADD_CHAT_FAILURE':
             return {
+                ...state,
                 data: [...state.data.map(item => {
+                    if (item._id === action.id) {
+                        return {
+                            ...item,
+                            sent: false
+                        }
+                    }
+                    return item
+                })],
+                selectedChat: [...state.selectedChat.map(item => {
                     if (item._id === action.id) {
                         return {
                             ...item,
@@ -62,39 +154,72 @@ const chats = (state = initialState, action) => {
 
         case 'REMOVE_CHAT_SUCCESS':
             return {
-                data: [...state.data.filter(item => item._id !== action.id)]
+                ...state,
+                data: [...state.data.filter(item => item._id !== action.id)],
+                selectedChat: [...state.selectedChat.filter(item => item._id !== action.id)]
             }
 
         case 'REMOVE_CHAT_FAILURE':
             break;
+
         case 'RESEND_CHAT_SUCCESS':
             return {
+                ...state,
                 data: [...state.data.map(item => {
                     if (item._id === action.id) {
                         return {
                             _id: action.payload._id,
                             message: action.payload.message,
-                            sender: sender,
+                            sender: action.payload.sender,
+                            receiver: action.payload.receiver,
+                            date: action.payload.date,
+                            readstatus: action.payload.readstatus,
+                            sent: true
+                        }
+                    }
+                    return item
+                })],
+                selectedChat: [...state.selectedChat.map(item => {
+                    if (item._id === action.id) {
+                        return {
+                            _id: action.payload._id,
+                            message: action.payload.message,
+                            sender: action.payload.sender,
+                            receiver: action.payload.receiver,
+                            date: action.payload.date,
+                            readstatus: action.payload.readstatus,
                             sent: true
                         }
                     }
                     return item
                 })]
             }
+        case 'RESEND_CHAT_FAILURE':
+            break;
 
-        // FOR RECEIVER
+        // FOR RECEIVER //
         case 'ADD_MESSAGE_SUCCESS':
             return {
-                data: [...state.data, action.payload]
+                ...state,
+                data: [...state.data, action.payload],
+                selectedChat: [...state.selectedChat, action.payload]
             }
 
+        case 'ADD_MESSAGE_SUCCESS_DIFFERENT':
+            return {
+                ...state,
+                data: [...state.data, action.payload]
+            }
         case 'ADD_MESSAGE_FAILURE':
             break;
 
         case 'REMOVE_MESSAGE_SUCCESS':
             return {
-                data: [...state.data.filter(item => item._id !== action.payload)]
+                ...state,
+                data: [...state.data.filter(item => item._id !== action.payload)],
+                selectedChat: [...state.selectedChat.filter(item => item._id !== action.payload)]
             }
+
         case 'REMOVE_MESSAGE_FAILURE':
             break;
 

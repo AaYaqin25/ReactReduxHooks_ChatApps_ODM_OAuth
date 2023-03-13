@@ -15,16 +15,19 @@ body {
     height: calc(100vh - 180px);
 }
 
-#card-body {
+#card-body-contact {
+    display: flex;
+    flex-direction: column;
     height: calc(100vh - 150px);
 }
 
-#card-body2 {
+#card-body-chat {
     height: calc(108vh - 245px);
     overflow-y: scroll;
 }
 
 #card-begin {
+    display: flex;
     height: calc(108vh - 190px);
 }
 
@@ -57,4 +60,38 @@ body {
     padding: 10px;
     width: fit-content;
     position: relative;
+}
+
+
+
+/* CSS for Modal */
+
+.modal-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #ececec;;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 500px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.msg {
+    margin-bottom: 20px;
+}
+
+.btn-danger {
+    margin-bottom: 7px;
 }
