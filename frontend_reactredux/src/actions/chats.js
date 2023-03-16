@@ -59,7 +59,7 @@ export const selectedChat = (payload) => {
 
                 dispatch(selectedChatSuccess({
                     data: [...data.map(item => {
-                        if (item.readstatus === false) {
+                        if (item.readstatus === false && item.sender === payload._id) {
                             item.readstatus = true
                             return item
                         }
