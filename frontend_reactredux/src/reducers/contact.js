@@ -22,7 +22,8 @@ const contacts = (state = initialState, action) => {
             }
 
         case 'LOAD_CONTACT_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         case 'REMOVE_NOTIFICATION_SUCCESS':
             return {
@@ -36,7 +37,8 @@ const contacts = (state = initialState, action) => {
             }
 
         case 'REMOVE_NOTIFICATION_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         default:
             return state

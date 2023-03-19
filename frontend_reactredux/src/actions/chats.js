@@ -7,14 +7,15 @@ const loadChatSuccess = (payload) => ({
     payload
 })
 
-const loadChatFailure = () => ({
-    type: 'LOAD_CHAT_FAILURE'
+const loadChatFailure = (error) => ({
+    type: 'LOAD_CHAT_FAILURE',
+    error
 })
 
 export const loadChat = () => {
     return async (dispatch, getState) => {
         try {
-            const { data } = await request.get('chats')
+            const { data } = await request.get('chats', { params: { user: JSON.parse(localStorage.getItem('user'))?.sender } })
             if (data.success) {
                 dispatch(loadChatSuccess(data.data))
             } else {
@@ -33,8 +34,9 @@ const selectedChatSuccess = (payload) => ({
 
 })
 
-const selectedChatFailure = () => ({
-    type: 'SELECTED_CHAT_FAILURE'
+const selectedChatFailure = (error) => ({
+    type: 'SELECTED_CHAT_FAILURE',
+    error
 })
 
 export const selectedChat = (payload) => {
@@ -82,8 +84,9 @@ const selectedReadNoticeSuccess = (payload) => ({
     payload
 })
 
-const selectedReadNoticeFailure = () => ({
-    type: 'SELECTED_READ_NOTICE_FAILURE'
+const selectedReadNoticeFailure = (error) => ({
+    type: 'SELECTED_READ_NOTICE_FAILURE',
+    error
 })
 
 
@@ -155,8 +158,9 @@ const removeChatSuccess = (id) => ({
 })
 
 
-const removeChatFailure = () => ({
+const removeChatFailure = (error) => ({
     type: 'REMOVE_CHAT_FAILURE',
+    error
 })
 
 export const removeChat = (_id, name) => {
@@ -184,8 +188,9 @@ const resendChatSuccess = (id, payload, date) => ({
 })
 
 
-const resendChatFailure = () => ({
+const resendChatFailure = (error) => ({
     type: 'RESEND_CHAT_FAILURE',
+    error
 })
 
 export const resendChat = (_id, message, name) => {
@@ -223,8 +228,9 @@ const addMessageSuccessDiff = (payload) => ({
 })
 
 
-const addMessageFailure = () => ({
-    type: 'ADD_MESSAGE_FAILURE'
+const addMessageFailure = (error) => ({
+    type: 'ADD_MESSAGE_FAILURE',
+    error
 })
 
 
@@ -261,8 +267,9 @@ const receiverReadNoticeSuccess = (payload) => ({
     payload
 })
 
-const receiverReadNoticeFailure = () => ({
-    type: 'RECEIVER_READ_NOTICE_FAILURE'
+const receiverReadNoticeFailure = (error) => ({
+    type: 'RECEIVER_READ_NOTICE_FAILURE',
+    error
 })
 
 
@@ -281,8 +288,9 @@ const removeMessageSuccess = (payload) => ({
     payload
 })
 
-const removeMessageFailure = () => ({
-    type: 'REMOVE_MESSAGE_FAILURE'
+const removeMessageFailure = (error) => ({
+    type: 'REMOVE_MESSAGE_FAILURE',
+    error
 })
 
 

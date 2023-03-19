@@ -7,7 +7,8 @@ const User = require('../models/user');
 
 router.get('/', async function (req, res, next) {
   try {
-    const getChat = await Chat.find()
+    const getUser = await User.findById(req.query?.user)
+    const getChat = await Chat.find({ $or: [{ sender: getUser?._id }, { receiver: getUser?._id }] })
     res.status(200).json(new Response(getChat))
   } catch (error) {
     console.log(error);

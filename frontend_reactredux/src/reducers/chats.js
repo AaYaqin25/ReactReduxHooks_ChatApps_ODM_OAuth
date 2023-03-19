@@ -16,7 +16,8 @@ const chats = (state = initialState, action) => {
             }
 
         case 'LOAD_CHAT_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         case 'SELECTED_CHAT_SUCCESS':
             return {
@@ -26,7 +27,8 @@ const chats = (state = initialState, action) => {
             }
 
         case 'SELECTED_CHAT_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         case 'SELECTED_READ_NOTICE_SUCCESS':
             return {
@@ -48,7 +50,8 @@ const chats = (state = initialState, action) => {
             }
 
         case 'SELECTED_READ_NOTICE_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         case 'RECEIVER_READ_NOTICE_SUCCESS':
             return {
@@ -69,7 +72,8 @@ const chats = (state = initialState, action) => {
                 })]
             }
         case 'RECEIVER_READ_NOTICE_FAILURE':
-            break
+            alert(action.error);
+            return state
 
         // FOR SENDER //
         case 'ADD_CHAT':
@@ -160,7 +164,8 @@ const chats = (state = initialState, action) => {
             }
 
         case 'REMOVE_CHAT_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         case 'RESEND_CHAT_SUCCESS':
             return {
@@ -195,7 +200,8 @@ const chats = (state = initialState, action) => {
                 })]
             }
         case 'RESEND_CHAT_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         // FOR RECEIVER //
         case 'ADD_MESSAGE_SUCCESS':
@@ -211,7 +217,8 @@ const chats = (state = initialState, action) => {
                 data: [...state.data, action.payload]
             }
         case 'ADD_MESSAGE_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         case 'REMOVE_MESSAGE_SUCCESS':
             return {
@@ -221,7 +228,8 @@ const chats = (state = initialState, action) => {
             }
 
         case 'REMOVE_MESSAGE_FAILURE':
-            break;
+            alert(action.error);
+            return state
 
         default:
             return state

@@ -5,15 +5,16 @@ export const loadContactSuccess = (payload) => ({
     payload
 })
 
-const loadContactFailure = () => ({
-    type: 'LOAD_CONTACT_FAILURE'
+const loadContactFailure = (error) => ({
+    type: 'LOAD_CONTACT_FAILURE',
+    error
 })
 
 export const loadContact = (payload) => {
     return async (dispatch, getState) => {
         try {
             const { data } = await request.get('users')
-            const response = await request.get('chats')
+            const response = await request.get('chats', { params: { user: JSON.parse(localStorage.getItem('user'))?.sender } })
             if (data.success) {
                 let cnt = []
                 let temp = data.data
@@ -35,7 +36,6 @@ export const loadContact = (payload) => {
                         }
                     }
                 }
-
                 await dispatch(loadContactSuccess({ cnt }))
             } else {
                 alert('gagal load contact')
@@ -51,8 +51,9 @@ const removeNotificationSuccess = (payload) => ({
     payload
 })
 
-const removeNotificationFailure = () => ({
-    type: 'REMOVE_NOTIFICATION_FAILURE'
+const removeNotificationFailure = (error) => ({
+    type: 'REMOVE_NOTIFICATION_FAILURE',
+    error
 })
 
 export const removeNotification = (payload) => {

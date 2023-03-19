@@ -43,7 +43,6 @@ export default function ChatBody(props) {
                     className="modal-content"
                     overlayClassName="modal-overlay"
                 >
-                    <FontAwesomeIcon icon={faTrashCan} />
                     <h4>Are you sure want to delete this message ?</h4>
                     <hr />
                     <h5 className='msg'>{props.chat}</h5>

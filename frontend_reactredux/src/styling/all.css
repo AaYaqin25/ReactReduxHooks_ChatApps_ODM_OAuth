@@ -3,32 +3,28 @@ body {
     background: #eee;
 }
 
-.row.row-broken {
-    padding-bottom: 0;
-}
 
 .col-inside-lg {
     padding: 20px;
 }
 
-.chat {
-    height: calc(100vh - 180px);
-}
 
 #card-body-contact {
-    display: flex;
     flex-direction: column;
     height: calc(100vh - 150px);
 }
 
 #card-body-chat {
-    height: calc(108vh - 245px);
+    flex: 1;
+    height: calc(108vh - 180px);
     overflow-y: scroll;
 }
 
 #card-begin {
     display: flex;
-    height: calc(108vh - 190px);
+    height: calc(108vh - 150px);
+    min-height: fit-content;
+    max-height: fit-content;
 }
 
 #chat-body {
@@ -71,7 +67,8 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: #ececec;;
+    background: #ececec;
+    ;
     position: fixed;
     top: 0;
     bottom: 0;

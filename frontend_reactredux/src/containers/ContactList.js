@@ -20,7 +20,11 @@ export default function ContactList(props) {
         try {
             await request.get('users/signout')
             localStorage.removeItem('user')
-            request.defaults.headers.common['Authorization'] = null
+            request.interceptors.request.use(function (config) {
+                config.headers.Authorization = null
+
+                return config
+            })
             setRedirect(true)
         } catch (error) {
             console.log(error);
@@ -39,7 +43,7 @@ export default function ContactList(props) {
                 <div className="chat-users">
                     <div className="card">
                         <div className="card-header text-center">
-                            <h2>Contacts</h2>
+                            <h2 style={{ flex: 1 }}>Contacts</h2>
                         </div>
                         <div id='card-body-contact' className='card-body'>
                             {contacts.map((item, index) => (

@@ -126,7 +126,7 @@ export default function FormChat() {
                                             <h2>Reciever Name</h2>
                                         </div>
                                         <div id='card-begin' className='card-body'>
-                                            <h4 style={{ textAlign: 'center', color: 'grey', paddingTop: '45%', paddingLeft: '25%' }}>Select a chat to start messaging</h4>
+                                            <h4 style={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', alignContent: 'center', flex: 1, marginTop: '40%' }}>Select a chat to start messaging</h4>
                                         </div>
                                     </div>
                                 </div>

@@ -13,7 +13,11 @@ export default function FormLogin() {
             const { data } = await request.post('users/auth', { username: userName })
             if (data.success) {
                 localStorage.setItem('user', JSON.stringify(data.data))
-                request.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`
+                request.interceptors.request.use(function (config) {
+                    config.headers.Authorization = `Bearer ${data.data.token}`
+
+                    return config
+                })
                 navigate('/chat', { replace: true })
                 socket.emit('send new user', { username: data.data.username, _id: data.data.id, unreadCount: 0 })
                 socket.emit('join room', data.data.username)
