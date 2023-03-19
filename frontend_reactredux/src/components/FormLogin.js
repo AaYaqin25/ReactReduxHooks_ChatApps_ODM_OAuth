@@ -31,9 +31,9 @@ export default function FormLogin() {
     }
 
     return (
-        <div className='container-fluid'>
+        <div className='container'>
             <form onSubmit={handleSubmit}>
-                <div className="row d-flex justify-content-center">
+                <div className="row d-flex justify-content-center align-items-center">
                     <div className="col-md-6">
                         <div className="card px-5 py-5">
                             <div className='card-body'>
@@ -43,7 +43,7 @@ export default function FormLogin() {
                                         <hr />
                                         <input style={{ marginTop: 20 }} type="text" className='form-control' id='username' name='username' placeholder='Username' value={userName} onChange={(e) => setUserName(e.target.value)} />
                                     </div>
-                                    <button type='submit' className="btn btn-info w-50" style={{ alignContent: 'center', justifyContent: 'center', marginLeft: 100, color: 'white', fontWeight: 'bold' }} >LOG IN</button>
+                                    <button type='submit' className="btn btn-info w-50" style={{ marginLeft: '25%', color: 'white', fontWeight: 'bold' }} >LOG IN</button>
                                 </div>
                             </div>
                         </div>

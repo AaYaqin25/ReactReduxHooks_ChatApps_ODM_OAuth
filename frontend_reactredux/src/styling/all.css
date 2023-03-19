@@ -4,25 +4,23 @@ body {
 }
 
 
-.col-inside-lg {
-    padding: 20px;
-}
-
-
 #card-body-contact {
     flex-direction: column;
     height: calc(100vh - 150px);
+    max-height: 100%;
 }
 
 #card-body-chat {
     flex: 1;
-    height: calc(108vh - 180px);
+    height: calc(108vh - 238px);
+    max-height: 100%;
     overflow-y: scroll;
 }
 
 #card-begin {
     display: flex;
-    height: calc(108vh - 150px);
+    height: calc(108vh - 185px);
+    max-height: 100%;
     min-height: fit-content;
     max-height: fit-content;
 }
