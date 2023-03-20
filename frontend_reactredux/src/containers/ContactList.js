@@ -37,6 +37,8 @@ export default function ContactList(props) {
         dispatch(selectedChat({ target, _id }))
         dispatch(removeNotification(_id))
     };
+
+    console.log(contacts, 'ini contact');
     return (
         <div className="col-sm-3 col-xs-12">
             <div className="col-inside-lg chat">

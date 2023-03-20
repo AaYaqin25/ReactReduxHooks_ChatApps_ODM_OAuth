@@ -15,7 +15,7 @@ const loadChatFailure = (error) => ({
 export const loadChat = () => {
     return async (dispatch, getState) => {
         try {
-            const { data } = await request.get('chats', { params: { user: JSON.parse(localStorage.getItem('user'))?.sender } })
+            const { data } = await request.get('chats', { params: { user: JSON.parse(localStorage.getItem('user'))?.id } })
             if (data.success) {
                 dispatch(loadChatSuccess(data.data))
             } else {

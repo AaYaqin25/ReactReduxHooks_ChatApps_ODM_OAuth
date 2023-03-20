@@ -31,10 +31,10 @@ router.post('/', async function (req, res, next) {
 
 router.delete('/:_id', async function (req, res, next) {
   try {
-    const deleteChat = await Chat.findByIdAndRemove(req.params._id)
-    const user = await User.findById(deleteChat.sender)
-    user.chats = user.chats.filter(item => !item.equals(deleteChat._id))
-    await user.save()
+    const deleteChat = await Chat.updateOne(
+      {_id :req.params._id},
+      {$set: {message: 'This message has been deleted'}}
+      )
     res.status(200).json(new Response(deleteChat))
   } catch (error) {
     console.log(error);

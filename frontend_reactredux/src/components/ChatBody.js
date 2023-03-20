@@ -3,53 +3,51 @@ import React, { useState, useCallback } from "react"
 import ReactMarkdown from 'react-markdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
-import { faRotateRight } from '@fortawesome/free-solid-svg-icons'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
-import { faCheckDouble } from '@fortawesome/free-solid-svg-icons'
-import Modal from 'react-modal'
-
-Modal.setAppElement('#root')
+import { faRotateRight, faCheck, faCheckDouble } from '@fortawesome/free-solid-svg-icons'
+import { Modal, Button } from 'react-bootstrap'
 
 export default function ChatBody(props) {
     const [show, setShow] = useState(false)
     const [modal, setModal] = useState(false)
+    const _id = JSON.parse(localStorage.getItem('user'))?.id
+    const sender = JSON.parse(localStorage.getItem('user'))?.sender
     const setRef = useCallback(node => {
         if (node) {
             node.scrollIntoView({ smooth: true })
         }
     }, [])
 
-    const handleShowButton = () => {
-        setShow(true)
+    const handleDeleteMessage = () => {
+        props.delete()
+        setModal(false)
     }
 
-    const handleHideButton = () => {
-        setShow(false)
-    }
-
-    const _id = JSON.parse(localStorage.getItem('user'))?.id
-    let sender = JSON.parse(localStorage.getItem('user'))?.sender
 
     if (props.sent === true && props.id === _id) {
         return (
-            <div id="chat-body" ref={setRef} className="d-flex justify-content-end mb-4" onMouseEnter={handleShowButton} onMouseLeave={handleHideButton}>
+            <div id="chat-body" ref={setRef} className="d-flex justify-content-end mb-4" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
                 {
                     show &&
                     <button type='button' className='btn btn-light' onClick={() => setModal(true)}><FontAwesomeIcon icon={faTrashCan} /></button>
                 }
 
-                <Modal
-                    isOpen={modal}
-                    className="modal-content"
-                    overlayClassName="modal-overlay"
-                >
-                    <h4>Are you sure want to delete this message ?</h4>
-                    <hr />
-                    <h5 className='msg'>{props.chat}</h5>
-                    <button type='button' className='btn btn-danger' onClick={props.delete}>Delete</button>
-                    <button type='button' className='btn btn-secondary' onClick={() => setModal(false)}>Cancel</button>
+                <Modal style={{ paddingTop: '350px' }} show={modal} onHide={() => setModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Are you sure delete this message</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
+                        {props.chat}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setModal(false)}>
+                            No
+                        </Button>
+                        <Button variant="primary" onClick={handleDeleteMessage}>
+                            Yes
+                        </Button>
+                    </Modal.Footer>
                 </Modal>
-                
+
                 <span style={{ marginLeft: '10px' }}><ReactMarkdown children={props.chat} />
                     <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
                         <div style={{ marginLeft: '10px' }}>

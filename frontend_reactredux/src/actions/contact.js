@@ -14,7 +14,7 @@ export const loadContact = (payload) => {
     return async (dispatch, getState) => {
         try {
             const { data } = await request.get('users')
-            const response = await request.get('chats', { params: { user: JSON.parse(localStorage.getItem('user'))?.sender } })
+            const response = await request.get('chats', { params: { user: JSON.parse(localStorage.getItem('user'))?.id } })
             if (data.success) {
                 let cnt = []
                 let temp = data.data

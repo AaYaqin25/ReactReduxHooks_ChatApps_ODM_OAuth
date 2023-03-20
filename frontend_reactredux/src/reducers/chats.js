@@ -159,8 +159,20 @@ const chats = (state = initialState, action) => {
         case 'REMOVE_CHAT_SUCCESS':
             return {
                 ...state,
-                data: [...state.data.filter(item => item._id !== action.id)],
-                selectedChat: [...state.selectedChat.filter(item => item._id !== action.id)]
+                data: [...state.data.map(item => {
+                    if (item._id === action.id) {
+                        item.message = "This message has been deleted"
+                        return item
+                    }
+                    return item
+                })],
+                selectedChat: [...state.selectedChat.map(item => {
+                    if (item._id === action.id) {
+                        item.message = "This message has been deleted"
+                        return item
+                    }
+                    return item
+                })]
             }
 
         case 'REMOVE_CHAT_FAILURE':
@@ -223,8 +235,20 @@ const chats = (state = initialState, action) => {
         case 'REMOVE_MESSAGE_SUCCESS':
             return {
                 ...state,
-                data: [...state.data.filter(item => item._id !== action.payload)],
-                selectedChat: [...state.selectedChat.filter(item => item._id !== action.payload)]
+                data: [...state.data.map(item => {
+                    if (item._id === action.payload) {
+                        item.message = "This message has been deleted"
+                        return item
+                    }
+                    return item
+                })],
+                selectedChat: [...state.selectedChat.map(item => {
+                    if (item._id === action.payload) {
+                        item.message = "This message has been deleted"
+                        return item
+                    }
+                    return item
+                })]
             }
 
         case 'REMOVE_MESSAGE_FAILURE':
